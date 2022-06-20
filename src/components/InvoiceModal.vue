@@ -1,9 +1,10 @@
 <template>
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
-    <form
+    <Form
       @submit.prevent="submitForm"
       :style="{color: darkMode ? '#fff' : '#141625', backgroundColor: darkMode ? '#141625' : '#fff' }"
       class="invoice-content"
+      :validation-schema="schema"
       >
       <Loading v-show="loading" />
       <h1 v-if="!editInvoice">New Invoice</h1>
@@ -23,7 +24,8 @@
           </div>
           <div class="input flex flex-column">
             <label for="billerZipCode">Zip Code</label>
-            <input required type="text" id="billerZipCode" v-model="billerZipCode" />
+            <Field name="pincode" required type="text" id="billerZipCode" v-model="billerZipCode" />
+            <ErrorMessage class="errormsg" name="pincode" />
           </div>
           <div class="input flex flex-column">
             <label for="billerCountry">Country</label>
@@ -41,7 +43,8 @@
         </div>
         <div class="input flex flex-column">
           <label for="clientEmail">Client's Email</label>
-          <input required type="text" id="clientEmail" v-model="clientEmail" />
+          <Field name="email" required type="text" id="clientEmail" v-model="clientEmail" />
+          <ErrorMessage class="errormsg" name="email" />
         </div>
         <div class="input flex flex-column">
           <label for="clientStreetAddress">Street Address</label>
@@ -54,7 +57,8 @@
           </div>
           <div class="input flex flex-column">
             <label for="clientZipCode">Zip Code</label>
-            <input required type="text" id="clientZipCode" v-model="clientZipCode" />
+            <Field name="pincode" required type="text" id="clientZipCode" v-model="clientZipCode" />
+             <ErrorMessage class="errormsg" name="pincode" />
           </div>
           <div class="input flex flex-column">
             <label for="clientCountry">Country</label>
@@ -97,7 +101,9 @@
             </tr>
             <tr class="table-items flex" v-for="(item, index) in invoiceItemList" :key="index">
               <td class="item-name"><input type="text" v-model="item.itemName" /></td>
-              <td class="qty"><input type="text" v-model="item.qty" /></td>
+              <td class="qty">
+                <input type="number" id="qty" v-model="item.qty" min="1" max="1000" />
+              </td>
               <td class="price"><input type="text" v-model="item.price" /></td>
               <td class="total flex">₹{{ (item.total = item.qty * item.price) }}</td>
               <img @click="deleteInvoiceItem(item.id)" src="@/assets/icon-delete.svg" alt="" />
@@ -122,19 +128,31 @@
           <button v-if="editInvoice" type="sumbit" class="purple">Update Invoice</button>
         </div>
       </div>
-    </form>
+    </Form>
   </div>
 </template>
 
 <script>
 import db from "../firebase/firebaseInit";
 import Loading from "../components/Loading";
+import { Field, Form, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 import { mapActions, mapMutations, mapState } from "vuex";
 import { uid } from "uid";
 export default {
   name: "invoiceModal",
   data() {
+    const schema = yup.object({
+      email: yup.string().required().email().nullable(),
+      pincode: yup.string()
+      .required()
+      .matches(/^[0-9]+$/, "Must be only digits")
+      .min(6,'Not a Valid Pincode')
+      .max(6,'Not a Valid Pincode')
+      .nullable()
+    });
     return {
+      schema,
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       docId: null,
       loading: null,
@@ -162,6 +180,9 @@ export default {
   },
   components: {
     Loading,
+    Field,
+    Form,
+    ErrorMessage
   },
   created() {
     // get current date for invoice date field
@@ -489,6 +510,11 @@ export default {
 
   .input {
     margin-bottom: 24px;
+    .errormsg{
+      color: rgb(255,51,51);
+      font-size: 12px;
+      font-weight: bold;
+    }
   }
 
   label {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="invoicesLoaded">
+  <div v-if="invoicesLoaded" :style="{color: modalActive ? '#fff' : '#141625'}" >
     <div v-if="!mobile" :class="[darkMode ? 'appDark flex flex-column' : 'appLight flex flex-column']">
       <Navigation />
       <div class="app-content flex flex-column">

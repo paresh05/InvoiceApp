@@ -10,10 +10,14 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "firebase": "^9.8.1",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.25",
     "uid": "^2.0.0",
+    "vee-validate": "^4.5.11",
     "vue": "^3.0.11",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

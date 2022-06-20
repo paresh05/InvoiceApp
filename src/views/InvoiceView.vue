@@ -43,11 +43,12 @@
         >
           Mark as Pending
         </button>
+        <button @click="download" class="dark-purple">Download PDF</button>
       </div>
     </div>
 
     <!-- Invoice Details -->
-    <div class="invoice-details flex flex-column">
+    <div class="invoice-details flex flex-column" ref="content">
       <div class="top flex">
         <div class="left flex flex-column">
           <p><span>#</span>{{ currentInvoice.invoiceId }}</p>
@@ -114,6 +115,8 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from "vuex";
+import jsPdf from 'jspdf';
+import autoTable from 'jspdf-autotable';
 export default {
   name: "invoiceView",
   data() {
@@ -136,7 +139,52 @@ export default {
       "UPDATE_STATUS_TO_PENDING",
       "UPDATE_STATUS_TO_PAID",
     ]),
-
+    download(){
+      const doc = new jsPdf('p','px','a4','true');
+      var dataInvoice = [];
+      this.currentInvoice.invoiceItemList.forEach(element=>{
+        var temp=[element.itemName,element.qty,element.price,element.total];
+        dataInvoice.push(temp);
+      });
+      var temp1=['Amount','','',this.currentInvoice.invoiceTotal];
+      dataInvoice.push(temp1);
+      doc.text(this.currentInvoice.billerStreetAddress,415,30,{
+        align: 'right',
+        maxWidth: 120
+      });
+      doc.text(this.currentInvoice.billerCity,415,45,{
+        align: 'right',
+        maxWidth: 120
+      });
+      doc.text(this.currentInvoice.billerZipCode,415,60,{
+        align: 'right',
+        maxWidth: 120
+      });
+      doc.text(this.currentInvoice.billerCountry,415,75,{
+        align: 'right',
+        maxWidth: 120
+      });
+      doc.text(`Invoice ID: #${this.currentInvoice.invoiceId}`,50,50);
+      doc.text(this.currentInvoice.productDescription,50,80);
+      doc.text('Invoice Date',50,110);
+      doc.text(this.currentInvoice.invoiceDate,50,130);
+      doc.text('Payment Due Date',50,169);
+      doc.text(this.currentInvoice.paymentDueDate,50,189);
+      doc.text('Bill To',180,110);
+      doc.text(this.currentInvoice.clientName,180,130);
+      doc.text(this.currentInvoice.clientStreetAddress,180,150);
+      doc.text(this.currentInvoice.clientCity,180,163);
+      doc.text(this.currentInvoice.clientZipCode,180,176);
+      doc.text(this.currentInvoice.clientCountry,180,189);
+      doc.text('Sent To',300,110);
+      doc.text(this.currentInvoice.clientEmail,300,130);
+      autoTable(doc,{
+        margin: { top: 250 },
+        styles:{fontSize: 15, cellPadding: 20},
+        head: [['Item Name', 'QTY', 'Price', 'Total']],
+        body: dataInvoice});
+      doc.save('invoice.pdf');
+    },
     getCurrentInvoice() {
       this.SET_CURRENT_INVOICE(this.$route.params.invoiceId);
       this.currentInvoice = this.currentInvoiceArray[0];
