@@ -1,17 +1,18 @@
 <template>
-  <div v-if="currentInvoice" class="invoice-view container">
+  <div id="exist" v-if="currentInvoice" class="invoice-view container">
     <router-link
       :style="{ color: darkMode ? '#fff' : '#141625' }"
       class="nav-link flex"
       :to="{ name: 'Home' }"
     >
-      <img src="@/assets/icon-arrow-left.svg" alt="" /> Go Back
+      <img src="@/assets/icon-arrow-left.svg" alt="left-arrow-icon" /> Go Back
     </router-link>
     <!-- Header -->
     <div class="header flex">
       <div class="left flex">
         <span>Status</span>
         <div
+          id="status"
           class="status-button flex"
           :class="{
             paid: currentInvoice.invoicePaid,
@@ -25,8 +26,8 @@
         </div>
       </div>
       <div class="right flex">
-        <button @click="toggleEditInvoice" class="dark-purple">Edit</button>
-        <button @click="deleteInvoice(currentInvoice.docId)" class="red">
+        <button id="editInvoice" @click="toggleEditInvoice" class="dark-purple">Edit</button>
+        <button id="deleteInvoice" @click="deleteInvoice(currentInvoice.docId)" class="red">
           Delete
         </button>
         <button
@@ -51,14 +52,14 @@
     <div class="invoice-details flex flex-column" ref="content">
       <div class="top flex">
         <div class="left flex flex-column">
-          <p><span>#</span>{{ currentInvoice.invoiceId }}</p>
-          <p>{{ currentInvoice.productDescription }}</p>
+          <p id="invoiceID"><span>#</span>{{ currentInvoice.invoiceId }}</p>
+          <p id="description">{{ currentInvoice.productDescription }}</p>
         </div>
         <div class="right flex flex-column">
-          <p>{{ currentInvoice.billerStreetAddress }}</p>
-          <p>{{ currentInvoice.billerCity }}</p>
-          <p>{{ currentInvoice.billerZipCode }}</p>
-          <p>{{ currentInvoice.billerCountry }}</p>
+          <p id="address">{{ currentInvoice.billerStreetAddress }}</p>
+          <p id="city">{{ currentInvoice.billerCity }}</p>
+          <p id="code">{{ currentInvoice.billerZipCode }}</p>
+          <p id="country">{{ currentInvoice.billerCountry }}</p>
         </div>
       </div>
       <div class="middle flex">
@@ -68,17 +69,17 @@
             {{ currentInvoice.invoiceDate }}
           </p>
           <h4>Payment Date</h4>
-          <p>
+          <p id="dueDate">
             {{ currentInvoice.paymentDueDate }}
           </p>
         </div>
         <div class="bill flex flex-column">
           <h4>Bill To</h4>
-          <p>{{ currentInvoice.clientName }}</p>
-          <p>{{ currentInvoice.clientStreetAddress }}</p>
-          <p>{{ currentInvoice.clientCity }}</p>
-          <p>{{ currentInvoice.clientZipCode }}</p>
-          <p>{{ currentInvoice.clientCountry }}</p>
+          <p id="name">{{ currentInvoice.clientName }}</p>
+          <p id="clientAddress">{{ currentInvoice.clientStreetAddress }}</p>
+          <p id="clientCity">{{ currentInvoice.clientCity }}</p>
+          <p id="clientCode">{{ currentInvoice.clientZipCode }}</p>
+          <p id="clientCountry">{{ currentInvoice.clientCountry }}</p>
         </div>
         <div class="send-to flex flex-column">
           <h4>Sent To</h4>
@@ -100,13 +101,13 @@
           >
             <p>{{ item.itemName }}</p>
             <p>{{ item.qty }}</p>
-            <p>{{ item.price }}</p>
-            <p>{{ item.total }}</p>
+            <p>{{ item.price.toLocaleString('en-IN') }}</p>
+            <p>{{ item.total.toLocaleString('en-IN') }}</p>
           </div>
         </div>
         <div class="total flex">
           <p>Amount Due</p>
-          <p>₹{{ currentInvoice.invoiceTotal }}</p>
+          <p id="invoiceTotal">₹{{ currentInvoice.invoiceTotal.toLocaleString('en-IN') }}</p>
         </div>
       </div>
     </div>

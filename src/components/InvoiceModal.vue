@@ -1,5 +1,5 @@
 <template>
-  <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
+  <div @input="getPos($event)" @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <Form
       @submit.prevent="submitForm"
       :style="{color: darkMode ? '#fff' : '#141625', backgroundColor: darkMode ? '#141625' : '#fff' }"
@@ -15,54 +15,57 @@
         <h4>Bill From</h4>
         <div class="input flex flex-column">
           <label for="billerStreetAddress">Street Address</label>
-          <input required type="text" id="billerStreetAddress" v-model="billerStreetAddress" />
+          <input required ref="streetAdd" type="text" id="billerStreetAddress" v-model="billerStreetAddress" />
         </div>
         <div class="location-details flex">
           <div class="input flex flex-column">
             <label for="billerCity">City</label>
-            <input required type="text" id="billerCity" v-model="billerCity" />
+            <input required ref="billerCity" type="text" id="billerCity" v-model="billerCity" />
           </div>
           <div class="input flex flex-column">
             <label for="billerZipCode">Zip Code</label>
-            <Field name="pincode" required type="text" id="billerZipCode" v-model="billerZipCode" />
+            <Field ref="billerPincode" name="pincode" required type="text" id="billerZipCode" v-model="billerZipCode" />
             <ErrorMessage class="errormsg" name="pincode" />
           </div>
           <div class="input flex flex-column">
             <label for="billerCountry">Country</label>
-            <input required type="text" id="billerCountry" v-model="billerCountry" />
+            <input required ref="billerCountry" type="text" id="billerCountry" v-model="billerCountry" />
           </div>
         </div>
       </div>
-
+      <div class="checkBoxBill flex">
+        <input class="checkBox" type="checkbox" id="BillTo" name="BillTo" v-on:click="checkBoxAddress"/>
+        <label for="BillTo"> If Bill To Address is same as Bill From</label>
+      </div>
       <!-- Bill To -->
       <div class="bill-to flex flex-column">
         <h4>Bill To</h4>
         <div class="input flex flex-column">
           <label for="clientName">Client's Name</label>
-          <input required type="text" id="clientName" v-model="clientName" />
+          <input required ref="name" type="text" id="clientName" v-model="clientName" />
         </div>
         <div class="input flex flex-column">
           <label for="clientEmail">Client's Email</label>
-          <Field name="email" required type="text" id="clientEmail" v-model="clientEmail" />
+          <Field name="email" ref="email" required type="text" id="clientEmail" v-model="clientEmail" />
           <ErrorMessage class="errormsg" name="email" />
         </div>
         <div class="input flex flex-column">
           <label for="clientStreetAddress">Street Address</label>
-          <input required type="text" id="clientStreetAddress" v-model="clientStreetAddress" />
+          <input required ref="clientStreetAddress" type="text" id="clientStreetAddress" v-model="clientStreetAddress" />
         </div>
         <div class="location-details flex">
           <div class="input flex flex-column">
             <label for="clientCity">City</label>
-            <input required type="text" id="clientCity" v-model="clientCity" />
+            <input required ref="clientCity" type="text" id="clientCity" v-model="clientCity" />
           </div>
           <div class="input flex flex-column">
             <label for="clientZipCode">Zip Code</label>
-            <Field name="pincode" required type="text" id="clientZipCode" v-model="clientZipCode" />
-             <ErrorMessage class="errormsg" name="pincode" />
+            <Field name="clientpincode" ref="clientpincode" required type="text" id="clientZipCode" v-model="clientZipCode" />
+             <ErrorMessage class="errormsg" name="clientpincode" />
           </div>
           <div class="input flex flex-column">
             <label for="clientCountry">Country</label>
-            <input required type="text" id="clientCountry" v-model="clientCountry" />
+            <input required ref="clientCountry" type="text" id="clientCountry" v-model="clientCountry" />
           </div>
         </div>
       </div>
@@ -88,7 +91,7 @@
         </div>
         <div class="input flex flex-column">
           <label for="productDescription">Product Description</label>
-          <input required type="text" id="productDescription" v-model="productDescription" />
+          <input required ref="description" type="text" id="productDescription" v-model="productDescription" />
         </div>
         <div class="work-items">
           <h3>Item List</h3>
@@ -100,18 +103,18 @@
               <th class="total">Toal</th>
             </tr>
             <tr class="table-items flex" v-for="(item, index) in invoiceItemList" :key="index">
-              <td class="item-name"><input type="text" v-model="item.itemName" /></td>
+              <td class="item-name"><input ref="itemName" type="text" v-model="item.itemName" /></td>
               <td class="qty">
-                <input type="number" id="qty" v-model="item.qty" min="1" max="1000" />
+                <input type="number" ref="qty" id="qty" v-model="item.qty" min="1" max="1000" />
               </td>
-              <td class="price"><input type="text" v-model="item.price" /></td>
-              <td class="total flex">₹{{ (item.total = item.qty * item.price) }}</td>
-              <img @click="deleteInvoiceItem(item.id)" src="@/assets/icon-delete.svg" alt="" />
+              <td class="price"><input type="text" ref="price" v-model="item.price" /></td>
+              <td class="total flex">₹{{ (item.total = item.qty * item.price).toLocaleString('en-IN') }}</td>
+              <img @click="deleteInvoiceItem(item.id)" src="@/assets/icon-delete.svg" alt="delete-icon" />
             </tr>
           </table>
 
-          <div @click="addNewInvoiceItem" class="flex button">
-            <img src="@/assets/icon-plus.svg" alt="" />
+          <div id="addNewItem" @click="addNewInvoiceItem" class="flex button">
+            <img src="@/assets/icon-plus.svg" alt="plus-icon" />
             Add New Item
           </div>
         </div>
@@ -135,7 +138,7 @@
 <script>
 import db from "../firebase/firebaseInit";
 import Loading from "../components/Loading";
-import { Field, Form, ErrorMessage } from 'vee-validate';
+import { Field,Form, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import { mapActions, mapMutations, mapState } from "vuex";
 import { uid } from "uid";
@@ -149,9 +152,16 @@ export default {
       .matches(/^[0-9]+$/, "Must be only digits")
       .min(6,'Not a Valid Pincode')
       .max(6,'Not a Valid Pincode')
-      .nullable()
+      .nullable(),
+      clientpincode: yup.string()
+      .required()
+      .matches(/^[0-9]+$/, "Must be only digits")
+      .min(6,'Not a Valid Pincode')
+      .max(6,'Not a Valid Pincode')
+      .nullable(),
     });
     return {
+      target: null,
       schema,
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
       docId: null,
@@ -226,7 +236,23 @@ export default {
         this.TOGGLE_MODAL();
       }
     },
-
+    getPos(e) {
+      this.target = e.target;
+    },
+    checkBoxAddress(e){
+      if(e.target.checked){
+        this.clientStreetAddress= this.billerStreetAddress;
+        this.clientCity= this.billerCity;
+        this.clientZipCode= this.billerZipCode;
+        this.clientCountry= this.billerCountry;
+      }
+      else{
+        this.clientStreetAddress= null;
+        this.clientCity= null;
+        this.clientZipCode= null;
+        this.clientCountry= null;
+      }
+    },
     closeInvoice() {
       this.TOGGLE_INVOICE();
       if (this.editInvoice) {
@@ -357,7 +383,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["editInvoice", "currentInvoiceArray","darkMode"]),
+    ...mapState(["editInvoice", "currentInvoiceArray","darkMode","modalActive"]),
   },
   watch: {
     paymentTerms() {
@@ -365,6 +391,24 @@ export default {
       this.paymentDueDateUnix = futureDate.setDate(futureDate.getDate() + parseInt(this.paymentTerms));
       this.paymentDueDate = new Date(this.paymentDueDateUnix).toLocaleDateString("en-us", this.dateOptions);
     },
+    modalActive: function() {
+      if(!this.modalActive){
+        if(this.target===this.$refs.streetAdd) this.$refs.streetAdd.focus();
+        else if(this.target===this.$refs.billerCity) this.$refs.billerCity.focus();
+        else if(this.target===this.$refs.billerPincode) this.$refs.billerPincode.focus();
+        else if(this.target===this.$refs.billerCountry) this.$refs.billerCountry.focus();
+        else if(this.target===this.$refs.name) this.$refs.name.focus();
+        else if(this.target===this.$refs.email) this.$refs.email.focus();
+        else if(this.target===this.$refs.clientStreetAddress) this.$refs.clientStreetAddress.focus();
+        else if(this.target===this.$refs.clientCity) this.$refs.clientCity.focus();
+        else if(this.target===this.$refs.clientpincode) this.$refs.clientpincode.focus();
+        else if(this.target===this.$refs.clientCountry) this.$refs.clientCountry.focus();
+        else if(this.target===this.$refs.itemName) this.$refs.itemName.focus();
+        else if(this.target===this.$refs.qty) this.$refs.qty.focus();
+        else if(this.target===this.$refs.price) this.$refs.price.focus();
+        else if(this.target===this.$refs.description) this.$refs.description.focus();
+      }
+    }
   },
 };
 </script>
@@ -407,11 +451,18 @@ export default {
       font-size: 12px;
       margin-bottom: 24px;
     }
-
+    .checkBoxBill{
+      margin-bottom: 10px;
+      //align-content: flex-start;
+      .checkBox{
+        width: 3%;
+        margin-right: 10px;
+      }
+    }
     // Bill To / Bill From
     .bill-to,
     .bill-from {
-      margin-bottom: 48px;
+      margin-bottom: 28px;
 
       .location-details {
         gap: 16px;

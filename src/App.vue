@@ -53,6 +53,15 @@ export default {
   computed: {
     ...mapState(["invoiceModal", "modalActive", "invoicesLoaded","darkMode"]),
   },
+  watch: {
+    modalActive: function() {
+      if(this.modalActive){
+        document.documentElement.style.overflow = 'hidden'
+        return
+      }
+      document.documentElement.style.overflow = 'auto'
+    }
+  }
 };
 </script>
 

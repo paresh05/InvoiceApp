@@ -3,15 +3,15 @@
     <!-- Header -->
     <div class="header flex">
       <div class="left flex flex-column">
-        <h1>Invoices</h1>
-        <span>There are {{ invoiceData.length }} total invoices</span>
+        <h1 id="heading">Invoices</h1>
+        <span id="subheading">There are {{ invoiceData.length }} total invoices</span>
       </div>
       <div class="right flex">
         <div @click="toggleFilterMenu" class="filter flex">
           <span
             >Filter by status <span v-if="filteredInvoice">: {{ filteredInvoice }}</span></span
           >
-          <img src="@/assets/icon-arrow-down.svg" alt="" />
+          <img src="@/assets/icon-arrow-down.svg" alt="arrow-down-icon" />
           <transition name="fade">
           <ul v-show="filterMenu" class="filter-menu">
             <li @click="filteredInvoices">Draft</li>
@@ -21,15 +21,15 @@
           </ul>
           </transition>
         </div>
-        <div @click="toogleMode" class="dark flex">
+        <div id="darkModeButton" @click="toogleMode" class="dark flex">
           <div :style="{transform: darkMode ? 'translateX(35px)' : 'translateX(0px)'}" class="inner-dark flex">
             <img v-if="darkMode" src="@/assets/icon-moon.svg" alt=""/>
-            <img v-else src="@/assets/icon-sun.svg" alt=""/>
+            <img v-else src="@/assets/icon-sun.svg" alt="sun-icon"/>
           </div>
         </div>
-        <div @click="newInvoice" class="button flex">
+        <div id="invoiceButton" @click="newInvoice" class="button flex">
           <div class="inner-button flex">
-            <img src="@/assets/icon-plus.svg" alt="" />
+            <img src="@/assets/icon-plus.svg" alt="plus-icon" />
           </div>
           <span>New Invoice</span>
         </div>
@@ -40,7 +40,7 @@
       <Invoice v-for="(invoice, index) in filteredData" :invoice="invoice" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
-      <img src="@/assets/illustration-empty.svg" alt="" />
+      <img src="@/assets/illustration-empty.svg" alt="empty-invoices" />
       <h3>There is nothing here</h3>
       <p>Create a new invoice by clicking the New Invoice button and get started</p>
     </div>
