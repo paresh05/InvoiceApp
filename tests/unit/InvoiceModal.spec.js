@@ -2,6 +2,10 @@ import { shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex'
 import InvoiceModal from '@/components/InvoiceModal'
 
+/**
+ * This is the test file for Invoice modal Component
+ */
+
 describe('Home.vue', () => {
   let mockedToggleModal;
   let mockedToggleInvFn;

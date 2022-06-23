@@ -6,7 +6,7 @@
 
 <script>
 /**
- * This component creates the loading spinner component of the app
+ * This component creates loading spinner component of the app
  * @returns a component with loading symbol when the invoice is submitted or updated
  */
 export default {

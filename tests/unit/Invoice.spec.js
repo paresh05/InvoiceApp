@@ -1,6 +1,10 @@
 import { shallowMount } from '@vue/test-utils'
 import Invoice from '@/components/Invoice'
 
+/**
+ * This is the test file for Invoice Component
+ */
+
 describe('Home.vue', () => {
   test('renders heading', () => {
     const wrapper = shallowMount(Invoice,{

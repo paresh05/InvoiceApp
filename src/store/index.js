@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 import db from "../firebase/firebaseInit";
 
 /**
- * This function is used to store the state using vuex
+ * This function is used to store the states using vuex
  */
 
 export default createStore({
