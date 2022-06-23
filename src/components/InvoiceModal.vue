@@ -24,7 +24,7 @@
           </div>
           <div class="input flex flex-column">
             <label for="billerZipCode">Zip Code</label>
-            <Field ref="billerPincode" name="pincode" required type="text" id="billerZipCode" v-model="billerZipCode" />
+            <Field ref="billerPincode" name="pincode" required type="text" id="billerZipCode" v-model="billerZipCode" as="input" />
             <ErrorMessage class="errormsg" name="pincode" />
           </div>
           <div class="input flex flex-column">
@@ -136,6 +136,10 @@
 </template>
 
 <script>
+/**
+ * This component creates the invoice form component of the app
+ * @returns a component with form with all the inputs
+ */
 import db from "../firebase/firebaseInit";
 import Loading from "../components/Loading";
 import { Field,Form, ErrorMessage } from 'vee-validate';
@@ -195,7 +199,7 @@ export default {
     ErrorMessage
   },
   created() {
-    // get current date for invoice date field
+    // gets current date for invoice date field
     if (!this.editInvoice) {
       this.invoiceDateUnix = Date.now();
       this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString("en-us", this.dateOptions);

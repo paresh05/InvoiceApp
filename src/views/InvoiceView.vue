@@ -115,6 +115,10 @@
 </template>
 
 <script>
+/**
+ * This component creates the invoiceView component of a particular invoice of the app
+ * @returns a component with all the information of a particular invoice selected and option to edit it.
+ */
 import { mapActions, mapMutations, mapState } from "vuex";
 import jsPdf from 'jspdf';
 import autoTable from 'jspdf-autotable';

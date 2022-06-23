@@ -98,7 +98,7 @@ describe('Home.vue', () => {
         global: { plugins: [store] }
     })
     const input = wrapper.find('#invoiceDate')
-    expect(input.element.value).toBe('Jun 22, 2022')
+    expect(input.element.value).toBe('Jun 23, 2022')
   })
   it('renders input field', async() => {
     const wrapper = shallowMount(InvoiceModal,{
@@ -106,7 +106,7 @@ describe('Home.vue', () => {
     })
     const input = wrapper.find('#paymentDueDate')
     await wrapper.find('#paymentTerms').setValue('60')
-    expect(input.element.value).toBe('Aug 21, 2022')
+    expect(input.element.value).toBe('Aug 22, 2022')
   })
   it('renders input field', async() => {
     const wrapper = shallowMount(InvoiceModal,{

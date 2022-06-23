@@ -23,6 +23,10 @@
 </template>
 
 <script>
+/**
+ * This component creates the invoice component for the Home view
+ * @returns a component with of each invoice and its details for displaying in dashboard
+ */
 export default {
   name: "invoice",
   props: ["invoice"],

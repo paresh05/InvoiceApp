@@ -48,6 +48,10 @@
 </template>
 
 <script>
+/**
+ * This component creates the Home view or the dashboard of the app
+ * @returns a component with dashboard which has list of invoices and their information
+ */
 import Invoice from "../components/Invoice";
 import { mapMutations, mapState } from "vuex";
 export default {

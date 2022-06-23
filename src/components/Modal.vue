@@ -11,6 +11,10 @@
 </template>
 
 <script>
+/**
+ * This component creates the Popup component of the app
+ * @returns a popup component which popus up when outside click is detected in the form
+ */
 import { mapMutations, mapState } from "vuex";
 export default {
   name: "modal",

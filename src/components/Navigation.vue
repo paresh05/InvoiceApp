@@ -7,6 +7,10 @@
 </template>
 
 <script>
+/**
+ * This component creates the Navigation component of the app
+ * @returns a component with sidebar
+ */
 export default {
   name: "navigation",
 };
