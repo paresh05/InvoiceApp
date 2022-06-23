@@ -137,7 +137,7 @@
 
 <script>
 /**
- * This component creates the invoice form component of the app
+ * This component creates invoice form component of the app
  * @returns a component with form with all the inputs
  */
 import db from "../firebase/firebaseInit";

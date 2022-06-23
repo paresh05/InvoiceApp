@@ -2,6 +2,10 @@ import { shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex'
 import Home from '@/views/Home'
 
+/**
+ * This is the test file for Home View
+ */
+
 describe('Home.vue', () => {
   let mockedToggleInvFn;
   let mockedToggleModeFn;

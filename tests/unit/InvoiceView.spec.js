@@ -2,6 +2,10 @@ import { mount } from '@vue/test-utils'
 import { createStore } from 'vuex'
 import InvoiceView from '@/views/InvoiceView'
 
+/**
+ * This is the test file for Invoice View
+ */
+
 describe('InvoiceView.vue', () => {
   let mockedCurrentInvFn;
   let mockedToggleInvFn;

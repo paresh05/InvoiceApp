@@ -8,7 +8,7 @@
 
 <script>
 /**
- * This component creates the Navigation component of the app
+ * This component creates Navigation component of the app
  * @returns a component with sidebar
  */
 export default {

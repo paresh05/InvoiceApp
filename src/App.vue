@@ -12,7 +12,7 @@
     </div>
     <div v-else class="mobile-message flex flex-column">
       <h2>Sorry, this app is not supported on Mobile Devices</h2>
-      <p>To use this app, please use a computer or Tablet</p>
+      <p>To use this app, please use a computer or a Tablet</p>
     </div>
   </div>
 </template>

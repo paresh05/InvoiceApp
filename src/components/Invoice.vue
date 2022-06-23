@@ -24,7 +24,7 @@
 
 <script>
 /**
- * This component creates the invoice component for the Home view
+ * This component creates the invoice component for the Home component
  * @returns a component with of each invoice and its details for displaying in dashboard
  */
 export default {
